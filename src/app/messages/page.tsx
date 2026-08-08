@@ -19,9 +19,9 @@ export default function MessagesPage() {
   if (!user) {
     return (
       <SiteShell title="Messages" description="Sign in to message mentors, professionals, and community peers.">
-        <div className="rounded-[2rem] border border-white/70 bg-white/80 p-8 shadow-sm">
-          <p className="text-lg text-slate-700">
-            Please <Link href="/login" className="font-semibold text-violet-700">log in</Link> to open direct messages.
+        <div className="rounded-[2rem] border border-slate-800 bg-[#0b111b] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+          <p className="text-lg text-slate-100">
+            Please <Link href="/login" className="font-semibold text-violet-400">log in</Link> to open direct messages.
           </p>
         </div>
       </SiteShell>
@@ -32,11 +32,13 @@ export default function MessagesPage() {
   const selectedUser = contacts.find((profile) => profile.id === selectedUserId) || contacts[0] || null;
 
   const thread = selectedUser
-    ? messages.filter(
-        (message) =>
-          (message.senderId === user.id && message.recipientId === selectedUser.id) ||
-          (message.senderId === selectedUser.id && message.recipientId === user.id),
-      )
+    ? messages
+        .filter(
+          (message) =>
+            (message.senderId === user.id && message.recipientId === selectedUser.id) ||
+            (message.senderId === selectedUser.id && message.recipientId === user.id),
+        )
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
     : [];
 
   const handleSendMessage = () => {
@@ -48,36 +50,36 @@ export default function MessagesPage() {
   return (
     <SiteShell title="Messages" description="Stay connected with conversations from your network, mentors, and community peers.">
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <aside className="space-y-6 rounded-[2rem] border border-white/70 bg-white/95 p-6 shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-700">Contacts</p>
+        <aside className="surface-card p-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-400">Contacts</p>
           <div className="space-y-3">
             {contacts.map((contact) => (
               <button
                 key={contact.id}
                 type="button"
                 onClick={() => setSelectedUserId(contact.id)}
-                className={`w-full rounded-3xl px-4 py-3 text-left transition ${
+                className={`w-full rounded-[1.75rem] px-4 py-3 text-left transition ${
                   selectedUserId === contact.id || (!selectedUserId && contacts[0]?.id === contact.id)
                     ? "bg-violet-600 text-white"
-                    : "bg-slate-50 text-slate-700 hover:bg-violet-50"
+                    : "bg-[#0b111b] text-slate-200 hover:bg-slate-900"
                 }`}
               >
                 <p className="font-semibold">{contact.name}</p>
-                <p className="mt-1 text-sm text-slate-500">{contact.headline}</p>
+                <p className="mt-1 text-sm text-slate-400">{contact.headline}</p>
               </button>
             ))}
           </div>
         </aside>
 
-        <section className="space-y-6 rounded-[2rem] border border-white/70 bg-white/95 p-6 shadow-sm">
+        <section className="space-y-6 surface-card p-6">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-700">Conversation</p>
-            <h1 className="mt-3 text-2xl font-semibold text-slate-950">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-400">Conversation</p>
+            <h1 className="mt-3 text-2xl font-semibold text-white">
               {selectedUser ? `Chat with ${selectedUser.name}` : "Select a contact"}
             </h1>
           </div>
 
-          <div className="space-y-4 border border-slate-200 bg-slate-50 p-4 rounded-[1.75rem] max-h-[520px] overflow-y-auto">
+          <div className="surface-panel space-y-4 p-4 max-h-[520px] overflow-y-auto">
             {selectedUser ? (
               thread.length === 0 ? (
                 <p className="text-sm text-slate-600">No messages yet. Send the first note to start the conversation.</p>
@@ -90,7 +92,7 @@ export default function MessagesPage() {
                       <div
                         key={message.id}
                         className={`rounded-[1.5rem] px-4 py-3 ${
-                          isSentByUser ? "ml-auto bg-violet-600 text-white" : "bg-white text-slate-700"
+                          isSentByUser ? "ml-auto bg-violet-600 text-white" : "bg-slate-900 text-slate-100"
                         } max-w-[85%]`}
                       >
                         <p className="text-sm leading-6">{message.content}</p>
@@ -111,13 +113,13 @@ export default function MessagesPage() {
                 onChange={(event) => setMessageDraft(event.target.value)}
                 rows={4}
                 placeholder="Write your message..."
-                className="w-full rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none"
+                className="input-field w-full"
               />
               <button
                 type="button"
                 onClick={handleSendMessage}
                 disabled={!messageDraft.trim()}
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-emerald-500 px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+                className="btn-primary"
               >
                 Send message
               </button>

@@ -11,9 +11,9 @@ export default function ResearchPage() {
     <SiteShell title="Research & Innovation" description="Insight, projects, and technology shaping the future of Sickle Cell care.">
       <section className="grid gap-6 md:grid-cols-3">
         {researchHighlights.map((highlight) => (
-          <div key={highlight.title} className="rounded-[1.5rem] border border-white/70 bg-white/80 p-6 shadow-sm">
-            <h3 className="text-xl font-semibold text-slate-950">{highlight.title}</h3>
-            <p className="mt-3 text-sm leading-7 text-slate-600">{highlight.detail}</p>
+          <div key={highlight.title} className="surface-card p-6">
+            <h3 className="text-xl font-semibold text-white">{highlight.title}</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-300">{highlight.detail}</p>
           </div>
         ))}
       </section>

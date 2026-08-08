@@ -39,6 +39,7 @@ const drawerItems = [
   { href: "/research", label: "Research", icon: Globe },
   { href: "/programs", label: "Programs", icon: CalendarDays },
   { href: "/events", label: "Events", icon: CalendarDays },
+  { href: "/assistant", label: "AI Assistant", icon: Sparkles },
   { href: "/donate", label: "Donations", icon: Coffee },
   { href: "/about", label: "About ThriveWithSCD", icon: ShieldCheck },
   { href: "/contact", label: "Contact", icon: LayoutDashboard },
@@ -117,15 +118,15 @@ export function SiteShell({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <aside className="hidden xl:flex xl:w-80 xl:flex-col xl:border-r xl:border-slate-200 xl:bg-white xl:py-8 xl:px-6 xl:shadow-sm">
+    <div className="min-h-screen bg-[#050505] text-slate-100">
+      <aside className="hidden xl:flex xl:w-80 xl:flex-col xl:border-r xl:border-slate-800 xl:bg-[#07080d] xl:py-8 xl:px-6">
         <div className="sticky top-0 flex h-screen flex-col justify-between">
           <div className="space-y-8">
-            <div className="flex items-center gap-3 rounded-[2rem] bg-gradient-to-br from-violet-700 to-emerald-500 px-5 py-4 text-white shadow-lg shadow-violet-200/30">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-lg font-semibold">TW</div>
+            <div className="flex items-center gap-3 rounded-[2rem] border border-slate-800 bg-[#0d1119] px-5 py-4 text-slate-100">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-700 text-lg font-semibold text-white">TW</div>
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-violet-100">ThriveWithSCD</p>
-                <p className="text-sm font-semibold">Social healthcare platform</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-violet-300">ThriveWithSCD</p>
+                <p className="text-sm font-semibold text-slate-100">Social healthcare platform</p>
               </div>
             </div>
 
@@ -136,9 +137,9 @@ export function SiteShell({
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="group flex items-center gap-3 rounded-3xl px-4 py-4 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
+                    className="group flex items-center gap-3 rounded-3xl px-4 py-4 text-sm font-medium text-slate-200 transition hover:bg-slate-900 hover:text-white"
                   >
-                    <Icon className="h-5 w-5 text-violet-500 group-hover:text-violet-700" />
+                    <Icon className="h-5 w-5 text-violet-400 group-hover:text-violet-200" />
                     <span>{item.label}</span>
                   </Link>
                 );
@@ -146,11 +147,11 @@ export function SiteShell({
             </nav>
           </div>
 
-          <div className="space-y-4 rounded-[2rem] border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
-            <p className="font-semibold text-slate-900">Platform focus</p>
+          <div className="space-y-4 rounded-[2rem] border border-slate-800 bg-[#0d1119] p-5 text-sm text-slate-300">
+            <p className="font-semibold text-slate-100">Platform focus</p>
             <p>Social connection, trusted health resources, and community support in one seamless app.</p>
-            <div className="rounded-3xl bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
-              <div className="flex items-center justify-between text-emerald-700">
+            <div className="rounded-3xl bg-[#0a0f18] px-4 py-3 text-sm text-slate-300">
+              <div className="flex items-center justify-between text-emerald-300">
                 <span>Verified</span>
                 <Star className="h-4 w-4" />
               </div>
@@ -160,21 +161,18 @@ export function SiteShell({
         </div>
       </aside>
 
-      {drawerOpen ? <div className="fixed inset-0 z-40 bg-slate-900/30 xl:hidden" onClick={() => setDrawerOpen(false)} /> : null}
+      {drawerOpen ? <div className="fixed inset-0 z-40 bg-slate-950/60 xl:hidden" onClick={() => setDrawerOpen(false)} /> : null}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 transform border-r border-slate-200 bg-white p-5 shadow-2xl transition duration-300 xl:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 transform border-r border-slate-800 bg-[#0d1018] p-5 transition duration-300 xl:hidden ${
           drawerOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-700 to-emerald-500 text-white">TW</div>
-            <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-500">ThriveWithSCD</p>
-              <p className="text-sm font-semibold text-slate-900">Explore</p>
-            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-violet-700 text-white">TW</div>
+            <p className="text-sm font-semibold text-white">Explore</p>
           </div>
-          <button type="button" onClick={() => setDrawerOpen(false)} className="rounded-full bg-slate-100 p-2 text-slate-700">
+          <button type="button" onClick={() => setDrawerOpen(false)} className="rounded-full bg-slate-800 p-2 text-slate-300">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -187,9 +185,9 @@ export function SiteShell({
                 key={item.href}
                 href={item.href}
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-3xl px-4 py-4 text-sm font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
+                className="flex items-center gap-3 rounded-3xl px-4 py-4 text-sm font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white"
               >
-                <Icon className="h-5 w-5 text-violet-500" />
+                <Icon className="h-5 w-5 text-violet-400" />
                 {item.label}
               </Link>
             );
@@ -198,33 +196,33 @@ export function SiteShell({
       </aside>
 
       <div className="flex flex-1 flex-col xl:pl-80">
-        <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
+        <header className="sticky top-0 z-40 border-b border-slate-800 bg-[#050505]/95 backdrop-blur-xl">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => setDrawerOpen(true)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-700"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-slate-100"
               >
                 <Menu className="h-5 w-5" />
               </button>
-              <Link href="/" className="inline-flex items-center gap-3 rounded-3xl bg-gradient-to-br from-violet-700 to-emerald-500 px-4 py-2 text-white shadow-lg shadow-violet-200/30">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/15 text-lg font-semibold">TW</div>
+              <Link href="/" className="inline-flex items-center gap-3 rounded-3xl bg-gradient-to-br from-violet-700 to-sky-500 px-4 py-2 text-white shadow-[0_20px_60px_rgba(124,58,237,0.18)]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-lg font-semibold">TW</div>
                 <div className="hidden sm:block">
-                  <p className="text-xs uppercase tracking-[0.3em] text-violet-100">ThriveWithSCD</p>
+                  <p className="text-xs uppercase tracking-[0.3em] text-slate-200">ThriveWithSCD</p>
                 </div>
               </Link>
             </div>
 
             <form className="hidden sm:flex flex-1 justify-center" onSubmit={handleSearchSubmit}>
-              <div className="relative flex w-full max-w-2xl items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 shadow-sm">
+              <div className="relative flex w-full max-w-2xl items-center gap-3 rounded-full border border-slate-800 bg-slate-900 px-4 py-2 shadow-sm">
                 <Search className="h-5 w-5 text-slate-400" />
                 <input
                   type="search"
                   value={searchTerm}
                   onChange={(event) => setSearchTerm(event.target.value)}
                   placeholder="Search users, posts, doctors, events..."
-                  className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                  className="w-full bg-transparent text-sm text-slate-100 outline-none placeholder:text-slate-500"
                 />
                 <button type="submit" className="hidden">Search</button>
               </div>
@@ -234,32 +232,32 @@ export function SiteShell({
               <button
                 type="button"
                 onClick={() => setMobileSearchOpen((current) => !current)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 sm:hidden"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-slate-100 sm:hidden"
               >
                 <Search className="h-5 w-5" />
               </button>
-              <Link href="/notifications" className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
+              <Link href="/notifications" className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-slate-100">
                 <Bell className="h-5 w-5" />
               </Link>
-              <Link href="/messages" className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
+              <Link href="/messages" className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-slate-100">
                 <MessageCircle className="h-5 w-5" />
               </Link>
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setProfileMenuOpen((current) => !current)}
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-emerald-500 text-sm font-semibold text-white shadow-lg"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-sky-500 text-sm font-semibold text-white shadow-lg"
                 >
                   {getInitials(user?.name)}
                 </button>
                 {profileMenuOpen ? (
-                  <div className="absolute right-0 top-14 z-20 w-64 rounded-3xl border border-slate-200 bg-white p-4 shadow-lg">
+                  <div className="absolute right-0 top-14 z-20 w-64 rounded-3xl border border-slate-800 bg-[#0d1018] p-4 shadow-[0_20px_40px_rgba(0,0,0,0.35)]">
                     {profileMenuItems.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}
                         onClick={() => setProfileMenuOpen(false)}
-                        className="block rounded-2xl px-3 py-3 text-sm text-slate-700 transition hover:bg-slate-50"
+                        className="block rounded-2xl px-3 py-3 text-sm text-slate-100 transition hover:bg-slate-800"
                       >
                         {item.label}
                       </Link>
@@ -267,7 +265,7 @@ export function SiteShell({
                     <button
                       type="button"
                       onClick={handleLogout}
-                      className="mt-2 w-full rounded-2xl bg-slate-100 px-3 py-3 text-left text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
+                      className="mt-2 w-full rounded-2xl bg-slate-900 px-3 py-3 text-left text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
                     >
                       Logout
                     </button>
@@ -278,15 +276,15 @@ export function SiteShell({
           </div>
 
           {mobileSearchOpen ? (
-            <form className="border-t border-slate-200 bg-white/95 px-4 py-4 sm:hidden" onSubmit={handleSearchSubmit}>
-              <div className="relative flex w-full items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-4 py-2">
+            <form className="border-t border-slate-800 bg-[#050505] px-4 py-4 sm:hidden" onSubmit={handleSearchSubmit}>
+              <div className="relative flex w-full items-center gap-3 rounded-full border border-slate-800 bg-slate-900 px-4 py-2">
                 <Search className="h-5 w-5 text-slate-400" />
                 <input
                   type="search"
                   value={searchTerm}
                   onChange={(event) => setSearchTerm(event.target.value)}
                   placeholder="Search platform content..."
-                  className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                  className="w-full bg-transparent text-sm text-slate-100 outline-none placeholder:text-slate-500"
                 />
                 <button type="submit" className="hidden">Search</button>
               </div>
@@ -298,43 +296,43 @@ export function SiteShell({
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <div className="mb-6 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-700">{title}</p>
-                <p className="mt-3 text-3xl font-semibold text-slate-950">{description}</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-400">{title}</p>
+                <p className="mt-3 text-3xl font-semibold text-white">{description}</p>
               </div>
-              <button className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-emerald-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-200">
+              <button className="btn-primary">
                 <Sparkles className="h-4 w-4" /> Explore all channels
               </button>
             </div>
 
             {searchTerm.trim().length > 0 ? (
-              <div className="mb-6 rounded-[2rem] border border-slate-200 bg-white/95 p-5 shadow-sm">
-                <p className="text-sm font-semibold text-slate-900">Search results for “{searchTerm}”</p>
+              <div className="mb-6 rounded-[2rem] border border-slate-800 bg-[#0d1018] p-5 shadow-sm">
+                <p className="text-sm font-semibold text-white">Search results for “{searchTerm}”</p>
                 <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                  <div className="rounded-[1.5rem] bg-slate-50 p-4">
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-700">Users</p>
+                  <div className="rounded-[1.5rem] bg-slate-900 p-4">
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-400">Users</p>
                     {searchResults.users.length === 0 ? (
-                      <p className="mt-3 text-sm text-slate-600">No users found.</p>
+                      <p className="mt-3 text-sm text-slate-400">No users found.</p>
                     ) : (
                       searchResults.users.map((profile) => (
                         <Link
                           key={profile.id}
                           href={`/users/${profile.id}`}
-                          className="mt-3 block rounded-2xl bg-white p-3 text-sm text-slate-700 shadow-sm transition hover:bg-violet-50"
+                          className="mt-3 block rounded-2xl bg-[#111827] p-3 text-sm text-slate-100 shadow-sm transition hover:bg-slate-800"
                         >
-                          <p className="font-semibold text-slate-950">{profile.name}</p>
-                          <p className="mt-1 text-sm text-slate-600">{profile.headline}</p>
+                          <p className="font-semibold text-white">{profile.name}</p>
+                          <p className="mt-1 text-sm text-slate-400">{profile.headline}</p>
                         </Link>
                       ))
                     )}
                   </div>
-                  <div className="rounded-[1.5rem] bg-slate-50 p-4">
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-700">Posts</p>
+                  <div className="rounded-[1.5rem] bg-slate-900 p-4">
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-400">Posts</p>
                     {searchResults.posts.length === 0 ? (
-                      <p className="mt-3 text-sm text-slate-600">No posts found.</p>
+                      <p className="mt-3 text-sm text-slate-400">No posts found.</p>
                     ) : (
                       searchResults.posts.map((post) => (
-                        <div key={post.id} className="mt-3 rounded-2xl bg-white p-3 shadow-sm">
-                          <p className="text-sm text-slate-600">{post.content.slice(0, 120)}...</p>
+                        <div key={post.id} className="mt-3 rounded-2xl bg-[#111827] p-3 shadow-sm">
+                          <p className="text-sm text-slate-300">{post.content.slice(0, 120)}...</p>
                         </div>
                       ))
                     )}
@@ -348,14 +346,21 @@ export function SiteShell({
         </main>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-1 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] xl:hidden">
+      <a
+        href="/assistant"
+        className="fixed right-5 bottom-24 z-50 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_20px_60px_rgba(124,58,237,0.25)] transition hover:scale-[1.02]"
+      >
+        <Sparkles className="h-4 w-4" />
+        AI Assistant
+      </a>
+      <nav className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-1 border-t border-slate-800 bg-[#050505]/95 px-4 py-3 shadow-[0_-8px_30px_rgba(0,0,0,0.35)] xl:hidden">
         {bottomNavItems.map((item) => {
           const Icon = item.icon;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className="flex flex-1 flex-col items-center gap-1 rounded-3xl px-2 py-2 text-xs font-medium text-slate-700 transition hover:bg-violet-50 hover:text-violet-700"
+              className="flex flex-1 flex-col items-center gap-1 rounded-3xl px-2 py-2 text-xs font-medium text-slate-200 transition hover:bg-slate-900 hover:text-white"
             >
               <Icon className="h-5 w-5" />
               {item.label}
