@@ -37,6 +37,7 @@ export default function PublicHomePage() {
             ThriveWithSCD
           </Link>
           <nav className="hidden items-center gap-8 text-sm text-slate-600 md:flex">
+            <Link href="/" className="transition hover:text-violet-700">Home</Link>
             <a href="#why" className="transition hover:text-violet-700">Why Thrive</a>
             <a href="#education" className="transition hover:text-violet-700">Education</a>
             <a href="#innovation" className="transition hover:text-violet-700">Innovation</a>
