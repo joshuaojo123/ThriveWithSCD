@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
 import { useMemo, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { useAuth } from "@/context/auth-context";
@@ -77,14 +78,24 @@ export default function CommunityPage() {
     <SiteShell title="Community" description="Connect with members, mentors, and healthcare professionals.">
       <div className="grid gap-6 xl:grid-cols-[1.4fr_0.9fr]">
         <section className="space-y-6">
-          <div className="surface-card p-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-400">Create post</p>
+          <div className="surface-card p-6 ring-1 ring-[rgba(124,58,237,0.14)] shadow-[0_30px_90px_-55px_rgba(124,58,237,0.35)] brand-hero-ring overflow-hidden">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-400">Create post</p>
+                <p className="mt-2 text-sm text-slate-400">Share your journey, ask a question, or mention @ThriveAI for assistants in the feed.</p>
+              </div>
+              <span className="rounded-full bg-violet-500/10 px-3 py-1 text-xs uppercase tracking-[0.24em] text-violet-200">Community first</span>
+            </div>
             <textarea
               value={postDraft}
               onChange={(event) => setPostDraft(event.target.value)}
               rows={4}
               className="input-field mt-4"
-              placeholder={user ? "Share an update, question, or experience..." : "Sign in to share your story."}
+              placeholder={
+                user
+                  ? "Share an update, question, or experience. Tag @ThriveAI to ask the assistant publicly."
+                  : "Sign in to share your story."
+              }
               disabled={!user}
             />
             <button
@@ -105,10 +116,10 @@ export default function CommunityPage() {
             const authorId = author?.id;
             const isFollowing = user && author ? author.followers?.includes(user.id) ?? false : false;
             return (
-              <article key={post.id} className="surface-card p-6">
+              <article key={post.id} className="surface-card p-6 shadow-[0_24px_60px_-30px_rgba(56,189,248,0.12)]">
                 <div className="flex items-start gap-4">
-                  <img src={author?.avatar || "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=256&q=80"} alt={author?.name || "Author"} className="h-14 w-14 rounded-full object-cover" />
-                  <div className="flex w-full items-center justify-between">
+                  <img src={author?.avatar || "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=256&q=80"} alt={author?.name || "Author"} className="h-14 w-14 rounded-2xl object-cover border border-slate-800" />
+                  <div className="flex w-full items-center justify-between gap-4">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <p className="text-sm font-semibold text-white">{author?.name || "Community member"}</p>
@@ -140,6 +151,13 @@ export default function CommunityPage() {
                   </div>
                 </div>
                 <p className="mt-5 text-base leading-7 text-slate-200">{post.content}</p>
+                {post.mentions.length > 0 ? (
+                  <div className="mt-4 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.24em] text-slate-400">
+                    {post.mentions.map((mention) => (
+                      <span key={mention} className="pill-chip bg-slate-950 border-slate-700 text-slate-200">{mention}</span>
+                    ))}
+                  </div>
+                ) : null}
                 <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-slate-400">
                   <button
                     type="button"

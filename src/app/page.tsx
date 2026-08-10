@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useMemo } from "react";
 import { SiteShell } from "@/components/site-shell";
@@ -16,14 +17,19 @@ export default function Home() {
   return (
     <SiteShell title="Home" description="Your personalized ThriveWithSCD feed for healthcare stories, training, community moments, and innovation.">
       <div className="space-y-6">
-        <div className="surface-card p-8">
+        <div className="surface-card p-8 ring-1 ring-[rgba(124,58,237,0.16)] shadow-[0_28px_90px_-40px_rgba(124,58,237,0.35)] brand-hero-ring overflow-hidden">
+          <div className="brand-wave" />
           <div className="grid gap-6 lg:grid-cols-[1.5fr_0.9fr] lg:items-center">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-400">ThriveWithSCD feed</p>
-              <h1 className="mt-4 text-4xl font-semibold text-white">A modern social network for warriors, care partners, and health experts.</h1>
+              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-300 motion-fade-up">ThriveWithSCD feed</p>
+              <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white motion-fade-up">A modern social network for warriors, care partners, and health experts.</h1>
               <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300">
-                Dive into community stories, discover educational posts, and connect with trusted professionals—designed to feel premium and purposeful.
+                Dive into community stories, discover educational posts, and connect with trusted professionals—designed to feel premium, futuristic, and deeply supportive.
               </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <span className="rounded-full bg-[rgba(124,58,237,0.14)] px-4 py-2 text-xs uppercase tracking-[0.28em] text-violet-200 motion-fade-up">Premium experience</span>
+                <span className="rounded-full bg-[rgba(15,23,42,0.92)] px-4 py-2 text-xs uppercase tracking-[0.28em] text-violet-100 motion-fade-up">AI-enabled insights</span>
+              </div>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <Link href="/community" className="btn-primary px-6 py-3">
@@ -38,16 +44,16 @@ export default function Home() {
 
         <div className="grid gap-6 xl:grid-cols-[1.7fr_0.9fr]">
           <section className="space-y-6">
-            {recentPosts.map((post) => {
+            {recentPosts.map((post, index) => {
               const author = profiles.find((profile) => profile.id === post.authorId);
               const authorId = author?.id;
               const isFollowing = user && author ? author.followers?.includes(user.id) ?? false : false;
 
               return (
-                <article key={post.id} className="surface-card p-6 transition hover:border-slate-700 hover:-translate-y-0.5">
+                <article key={post.id} className="surface-card p-6 transition duration-200 hover:-translate-y-0.5 hover:border-violet-500/20 motion-fade-up" style={{ animationDelay: `${0.08 * (index + 1)}s` }}>
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
-                              <p className="text-sm font-semibold text-white">{author?.name || "Community member"}</p>
+                      <p className="text-sm font-semibold text-white">{author?.name || "Community member"}</p>
                       <p className="mt-1 text-xs uppercase tracking-[0.24em] text-slate-400">{new Date(post.createdAt).toLocaleDateString()}</p>
                     </div>
                     <div className="flex items-center gap-3">
@@ -69,7 +75,7 @@ export default function Home() {
                   {post.media?.length ? (
                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
                       {post.media.map((item) => (
-                        <div key={item.src} className="overflow-hidden rounded-[1.75rem] bg-slate-900">
+                        <div key={item.src} className="overflow-hidden rounded-[1.75rem] bg-slate-900 shadow-lg shadow-violet-500/10">
                           {item.type === "image" ? (
                             <img src={item.src} alt={item.alt} className="h-52 w-full object-cover" />
                           ) : (
@@ -97,8 +103,8 @@ export default function Home() {
             <div className="surface-card p-6">
               <p className="text-sm font-semibold uppercase tracking-[0.28em] text-violet-400">Community highlights</p>
               <div className="mt-4 space-y-3 text-sm leading-7 text-slate-400">
-                <div className="rounded-[1.5rem] bg-[#11131d] p-4 text-slate-300">Wellness posts, mentorship invitations, and research updates in one connected experience.</div>
-                <div className="rounded-[1.5rem] bg-[#11131d] p-4 text-slate-300">Find profiles that match your journey, from warriors to healthcare professionals.</div>
+                <div className="rounded-3xl bg-[#11131d] p-4 text-slate-300">Wellness posts, mentorship invitations, and research updates in one connected experience.</div>
+                <div className="rounded-3xl bg-[#11131d] p-4 text-slate-300">Find profiles that match your journey, from warriors to healthcare professionals.</div>
               </div>
             </div>
 

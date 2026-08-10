@@ -52,6 +52,7 @@ export type Post = {
   likes: string[];
   comments: Comment[];
   tags: string[];
+  mentions: string[];
   postType: "text" | "image" | "video" | "educational" | "event";
   media?: PostMedia[];
   shareCount: number;
@@ -104,7 +105,7 @@ type CommunityContextValue = CommunityState & {
   sendMentorshipRequest: (mentorId: string, message: string) => void;
   followUser: (profileId: string) => void;
   unfollowUser: (profileId: string) => void;
-  sendDirectMessage: (recipientId: string, content: string) => void;
+  sendDirectMessage: (recipientId: string, content: string) => Promise<void>;
   broadcastNotification: (title: string, body: string) => void;
   verifyProfile: (profileId: string, verified: boolean) => void;
   deletePost: (postId: string) => void;
@@ -117,6 +118,23 @@ const CommunityContext = createContext<CommunityContextValue | undefined>(undefi
 const STORAGE_KEY = "thrive-community-state-v1";
 
 const defaultProfiles: UserProfile[] = [
+  {
+    id: "ai",
+    username: "thriveai",
+    name: "ThriveAI",
+    email: "assistant@thrivewithscd.local",
+    role: "AI Assistant",
+    headline: "Your intelligent Thrive companion.",
+    bio: "ThriveAI helps answer questions, summarize research, and guide you through the platform.",
+    location: "Cloud",
+    avatar: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=256&q=80",
+    banner: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80",
+    website: undefined,
+    verified: true,
+    followers: [],
+    following: [],
+    joinedAt: new Date().toISOString(),
+  },
   {
     id: "user-1",
     username: "amina.j",
@@ -177,6 +195,7 @@ const defaultPosts: Post[] = [
     createdAt: "2026-08-02T08:24:00.000Z",
     likes: ["user-2"],
     tags: ["self-care", "support"],
+    mentions: [],
     comments: [
       {
         id: "comment-1",
@@ -207,6 +226,7 @@ const defaultPosts: Post[] = [
     createdAt: "2026-08-01T14:50:00.000Z",
     likes: [],
     tags: ["mentorship", "education"],
+    mentions: [],
     comments: [],
     postType: "educational",
     shareCount: 4,
@@ -216,6 +236,14 @@ const defaultPosts: Post[] = [
 ];
 
 const defaultMessages: Message[] = [
+  {
+    id: "message-ai-1",
+    senderId: "ai",
+    recipientId: "user-1",
+    content: "Hi Amina, I’m ThriveAI. Tag me in a post with @ThriveAI or send me a direct message to get smart support on research, pain management, and community resources.",
+    createdAt: "2026-08-02T11:00:00.000Z",
+    read: false,
+  },
   {
     id: "message-1",
     senderId: "user-2",
@@ -350,6 +378,7 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
       throw new Error("Sign in to publish posts.");
     }
 
+    const mentions = content.match(/@\w+/g)?.map((mention) => mention.toLowerCase()) ?? [];
     const nextPost: Post = {
       id: crypto.randomUUID(),
       authorId: user.id,
@@ -358,6 +387,7 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
       likes: [],
       comments: [],
       tags: [],
+      mentions,
       postType: "text",
       media: [],
       shareCount: 0,
@@ -373,6 +403,57 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
         createNotification(user.id, "Post published", "Your community post is now live."),
       ],
     }));
+
+    const aiMentioned = mentions.some((mention) => mention === "@thriveai" || mention === "@ai");
+    if (!aiMentioned) {
+      return;
+    }
+
+    void (async () => {
+      try {
+        const response = await fetch("/api/assistant", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: content }),
+        });
+        const data = await response.json();
+
+        const aiComment: Comment = {
+          id: crypto.randomUUID(),
+          authorId: "ai",
+          content: data.reply || "ThriveAI is ready to help, but I couldn’t generate a response right now.",
+          createdAt: new Date().toISOString(),
+          likes: [],
+          replies: [],
+        };
+
+        setState((current) => ({
+          ...current,
+          posts: current.posts.map((post) =>
+            post.id === nextPost.id ? { ...post, comments: [...post.comments, aiComment] } : post,
+          ),
+          notifications: [
+            ...current.notifications,
+            createNotification(user.id, "ThriveAI replied", "Your tagged AI request received an answer."),
+          ],
+        }));
+      } catch {
+        const aiComment: Comment = {
+          id: crypto.randomUUID(),
+          authorId: "ai",
+          content: "ThriveAI is unavailable right now. Please try again shortly.",
+          createdAt: new Date().toISOString(),
+          likes: [],
+          replies: [],
+        };
+        setState((current) => ({
+          ...current,
+          posts: current.posts.map((post) =>
+            post.id === nextPost.id ? { ...post, comments: [...post.comments, aiComment] } : post,
+          ),
+        }));
+      }
+    })();
   };
 
   const togglePostLike = (postId: string) => {
@@ -602,7 +683,7 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
     }));
   };
 
-  const sendDirectMessage = (recipientId: string, content: string) => {
+  const sendDirectMessage = async (recipientId: string, content: string) => {
     if (!user) {
       throw new Error("Sign in to send messages.");
     }
@@ -624,6 +705,47 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
         createNotification(recipientId, "New message received", `${user.name} sent you a direct message.`),
       ],
     }));
+
+    if (recipientId === "ai") {
+      try {
+        const response = await fetch("/api/assistant", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: content }),
+        });
+        const data = await response.json();
+        const aiReply: Message = {
+          id: crypto.randomUUID(),
+          senderId: "ai",
+          recipientId: user.id,
+          content: data.reply || "ThriveAI could not answer that right now.",
+          createdAt: new Date().toISOString(),
+          read: false,
+        };
+
+        setState((current) => ({
+          ...current,
+          messages: [...current.messages, aiReply],
+          notifications: [
+            ...current.notifications,
+            createNotification(user.id, "ThriveAI replied", "Your AI assistant has answered your question."),
+          ],
+        }));
+      } catch {
+        const aiReply: Message = {
+          id: crypto.randomUUID(),
+          senderId: "ai",
+          recipientId: user.id,
+          content: "ThriveAI is unavailable right now. Please try again shortly.",
+          createdAt: new Date().toISOString(),
+          read: false,
+        };
+        setState((current) => ({
+          ...current,
+          messages: [...current.messages, aiReply],
+        }));
+      }
+    }
   };
 
   const broadcastNotification = (title: string, body: string) => {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AuthProvider } from "@/context/auth-context";
 import { CommunityProvider } from "@/context/community-context";
+import { ThemeProvider } from "@/context/theme-context";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +18,9 @@ export default function RootLayout({
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <AuthProvider>
-          <CommunityProvider>{children}</CommunityProvider>
+          <ThemeProvider>
+            <CommunityProvider>{children}</CommunityProvider>
+          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>

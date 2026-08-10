@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState, type FormEvent } from "react";
 import { useAuth } from "@/context/auth-context";
 import { useCommunity } from "@/context/community-context";
@@ -84,10 +84,16 @@ export function SiteShell({
   const router = useRouter();
   const { user, logout } = useAuth();
   const { profiles, posts } = useCommunity();
+  const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const isActiveLink = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname?.startsWith(href);
+  };
 
   const searchResults = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -118,28 +124,31 @@ export function SiteShell({
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-slate-100">
-      <aside className="hidden xl:flex xl:w-80 xl:flex-col xl:border-r xl:border-slate-800 xl:bg-[#07080d] xl:py-8 xl:px-6">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+      <aside className="hidden xl:flex xl:w-80 xl:flex-col xl:border-r xl:border-[var(--surface-border)] xl:bg-[rgba(17,24,39,0.92)] xl:py-8 xl:px-6">
         <div className="sticky top-0 flex h-screen flex-col justify-between">
           <div className="space-y-8">
-            <div className="flex items-center gap-3 rounded-[2rem] border border-slate-800 bg-[#0d1119] px-5 py-4 text-slate-100">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-700 text-lg font-semibold text-white">TW</div>
+            <div className="flex items-center gap-3 rounded-4xl border border-[var(--surface-border)] bg-[var(--surface)] px-5 py-4 text-[var(--foreground)] shadow-[0_28px_90px_-40px_rgba(124,58,237,0.35)]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--brand-purple)] text-lg font-semibold text-white">TW</div>
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-violet-300">ThriveWithSCD</p>
-                <p className="text-sm font-semibold text-slate-100">Social healthcare platform</p>
+                <p className="text-sm font-semibold text-[var(--foreground)]">Social healthcare platform</p>
               </div>
             </div>
 
             <nav className="space-y-2">
               {drawerItems.map((item) => {
                 const Icon = item.icon;
+                const active = isActiveLink(item.href);
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="group flex items-center gap-3 rounded-3xl px-4 py-4 text-sm font-medium text-slate-200 transition hover:bg-slate-900 hover:text-white"
+                    className={`group flex items-center gap-3 rounded-3xl px-4 py-4 text-sm font-medium transition ${
+                      active ? "bg-[rgba(124,58,237,0.14)] text-white shadow-[0_20px_60px_rgba(124,58,237,0.14)]" : "text-slate-200 hover:bg-[rgba(124,58,237,0.08)] hover:text-white"
+                    }`}
                   >
-                    <Icon className="h-5 w-5 text-violet-400 group-hover:text-violet-200" />
+                    <Icon className={`h-5 w-5 ${active ? "text-violet-300" : "text-violet-400 group-hover:text-violet-200"}`} />
                     <span>{item.label}</span>
                   </Link>
                 );
@@ -147,7 +156,7 @@ export function SiteShell({
             </nav>
           </div>
 
-          <div className="space-y-4 rounded-[2rem] border border-slate-800 bg-[#0d1119] p-5 text-sm text-slate-300">
+          <div className="space-y-4 rounded-4xl border border-slate-800 bg-[#0d1119] p-5 text-sm text-slate-300">
             <p className="font-semibold text-slate-100">Platform focus</p>
             <p>Social connection, trusted health resources, and community support in one seamless app.</p>
             <div className="rounded-3xl bg-[#0a0f18] px-4 py-3 text-sm text-slate-300">
@@ -206,7 +215,7 @@ export function SiteShell({
               >
                 <Menu className="h-5 w-5" />
               </button>
-              <Link href="/" className="inline-flex items-center gap-3 rounded-3xl bg-gradient-to-br from-violet-700 to-sky-500 px-4 py-2 text-white shadow-[0_20px_60px_rgba(124,58,237,0.18)]">
+              <Link href="/" className="inline-flex items-center gap-3 rounded-3xl bg-linear-to-br from-violet-700 to-sky-500 px-4 py-2 text-white shadow-[0_20px_60px_rgba(124,58,237,0.18)]">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-lg font-semibold">TW</div>
                 <div className="hidden sm:block">
                   <p className="text-xs uppercase tracking-[0.3em] text-slate-200">ThriveWithSCD</p>
@@ -215,7 +224,7 @@ export function SiteShell({
             </div>
 
             <form className="hidden sm:flex flex-1 justify-center" onSubmit={handleSearchSubmit}>
-              <div className="relative flex w-full max-w-2xl items-center gap-3 rounded-full border border-slate-800 bg-slate-900 px-4 py-2 shadow-sm">
+              <div className="relative flex w-full max-w-2xl items-center gap-3 rounded-full border border-[var(--surface-border)] bg-[var(--surface)] px-4 py-2 shadow-sm">
                 <Search className="h-5 w-5 text-slate-400" />
                 <input
                   type="search"
@@ -246,7 +255,7 @@ export function SiteShell({
                 <button
                   type="button"
                   onClick={() => setProfileMenuOpen((current) => !current)}
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-sky-500 text-sm font-semibold text-white shadow-lg"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-violet-600 to-sky-500 text-sm font-semibold text-white shadow-lg"
                 >
                   {getInitials(user?.name)}
                 </button>
@@ -276,8 +285,8 @@ export function SiteShell({
           </div>
 
           {mobileSearchOpen ? (
-            <form className="border-t border-slate-800 bg-[#050505] px-4 py-4 sm:hidden" onSubmit={handleSearchSubmit}>
-              <div className="relative flex w-full items-center gap-3 rounded-full border border-slate-800 bg-slate-900 px-4 py-2">
+            <form className="border-t border-[var(--surface-border)] bg-[var(--background)] px-4 py-4 sm:hidden" onSubmit={handleSearchSubmit}>
+              <div className="relative flex w-full items-center gap-3 rounded-full border border-[var(--surface-border)] bg-[var(--surface)] px-4 py-2">
                 <Search className="h-5 w-5 text-slate-400" />
                 <input
                   type="search"
@@ -356,11 +365,14 @@ export function SiteShell({
       <nav className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-1 border-t border-slate-800 bg-[#050505]/95 px-4 py-3 shadow-[0_-8px_30px_rgba(0,0,0,0.35)] xl:hidden">
         {bottomNavItems.map((item) => {
           const Icon = item.icon;
+          const active = isActiveLink(item.href);
           return (
             <Link
               key={item.href}
               href={item.href}
-              className="flex flex-1 flex-col items-center gap-1 rounded-3xl px-2 py-2 text-xs font-medium text-slate-200 transition hover:bg-slate-900 hover:text-white"
+              className={`flex flex-1 flex-col items-center gap-1 rounded-3xl px-2 py-2 text-xs font-medium transition ${
+                active ? "bg-slate-900 text-white" : "text-slate-200 hover:bg-slate-900 hover:text-white"
+              }`}
             >
               <Icon className="h-5 w-5" />
               {item.label}
