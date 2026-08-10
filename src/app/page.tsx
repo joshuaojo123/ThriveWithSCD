@@ -1,10 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Sparkles } from "lucide-react";
-import { useAuth } from "@/context/auth-context";
 
 const statistics = [
   { label: "Connected members", value: "12,000+" },
@@ -19,15 +16,6 @@ const values = [
 ];
 
 export default function PublicHomePage() {
-  const { user, hydrated } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (hydrated && user) {
-      router.replace("/dashboard");
-    }
-  }, [hydrated, user, router]);
-
   return (
     <div className="bg-white text-slate-950">
       <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/95 backdrop-blur-xl">
