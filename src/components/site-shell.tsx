@@ -30,7 +30,7 @@ import {
 import type { ReactNode } from "react";
 
 const drawerItems = [
-  { href: "/", label: "Home", icon: Home },
+  { href: "/home", label: "Home", icon: Home },
   { href: "/community", label: "Community Feed", icon: Users },
   { href: "/education", label: "Education Hub", icon: BookOpen },
   { href: "/store", label: "Thrive Store", icon: Coffee },
@@ -46,7 +46,7 @@ const drawerItems = [
 ];
 
 const bottomNavItems = [
-  { href: "/", label: "Home", icon: Home },
+  { href: "/home", label: "Home", icon: Home },
   { href: "/community", label: "Community", icon: Users },
   { href: "/store", label: "Store", icon: Coffee },
   { href: "/messages", label: "Messages", icon: MessageCircle },
@@ -215,7 +215,7 @@ export function SiteShell({
               >
                 <Menu className="h-5 w-5" />
               </button>
-              <Link href="/" className="inline-flex items-center gap-3 rounded-3xl bg-linear-to-br from-violet-700 to-sky-500 px-4 py-2 text-white shadow-[0_20px_60px_rgba(124,58,237,0.18)]">
+              <Link href="/home" className="inline-flex items-center gap-3 rounded-3xl bg-linear-to-br from-violet-700 to-sky-500 px-4 py-2 text-white shadow-[0_20px_60px_rgba(124,58,237,0.18)]">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-lg font-semibold">TW</div>
                 <div className="hidden sm:block">
                   <p className="text-xs uppercase tracking-[0.3em] text-slate-200">ThriveWithSCD</p>

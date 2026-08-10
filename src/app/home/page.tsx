@@ -1,6 +1,22 @@
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { SiteShell } from "@/components/site-shell";
+import { useAuth } from "@/context/auth-context";
 
 export default function HomeAliasPage() {
+  const { user, hydrated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (hydrated && !user) {
+      router.replace("/login");
+    }
+  }, [hydrated, user, router]);
+
+  if (!hydrated || !user) {
+    return null;
+  }
+
   return (
     <SiteShell title="Home" description="Your gateway to ThriveWithSCD's full platform experience.">
       <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
